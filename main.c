@@ -1,29 +1,36 @@
 
-#include "mlx42/include/MLX42/MLX42.h"
-#include <stdlib.h>
+#include "include/cub3d.h"
 
-#define WIDTH 800
-#define HEIGHT 600
-
-// gcc main.c mlx42/build/libmlx42.a -Iinclude -lglfw -framework Cocoa -framework
-//OpenGL -framework IOKit
-
-void keyhook(mlx_key_data_t keydata, void *param)
+void put_pixel(int x, int y, int color, t_game *game)
 {
-	if(keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-	{
-		mlx_close_window((mlx_t*)param);
-	}
+	int	index;
+	t_rgb rgb;
+
+	rgb.value = 0x3366CC;
+
+	if(x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
+		return ;
+	index = y * game->stride + x * game->bits_per_pixel / 8;
+	game->pixels[index] = rgb.blue;
+	game->pixels[index + 1] = rgb.green;
+	game->pixels[index + 2] = rgb.red;
+
+}
+
+void init_game(t_game *game) {
+	game->mlx = mlx_init(WIDTH, HEIGHT, "Cub3D", true);
+	game->mlx = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+
+	mlx_image_to_window(game->mlx, game->img, 0, 0);
 }
 
 int main(void)
 {
-    mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "Hello MLX42", true);
-    if (!mlx)
-        return EXIT_FAILURE;
+	t_game game;
 
-    mlx_key_hook(mlx, keyhook, mlx);
-    mlx_loop(mlx);
-    mlx_terminate(mlx);
-    return EXIT_SUCCESS;
+	init_game(&game);
+
+	mlx_loop(game.mlx);
+
+	return EXIT_SUCCESS;
 }
