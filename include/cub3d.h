@@ -4,10 +4,15 @@
 #define WIDTH 800
 #define HEIGHT 600
 
-#define W 119
-#define A 97
-#define S 115
-#define D 100
+#define TRUE 1
+#define FALSE 0
+
+typedef enum e_key {
+	KEY_W = 119,
+	KEY_A = 97,
+	KEY_S = 115,
+	KEY_D = 100
+} t_key;
 
 #define PI 3.1415926 //535
 
@@ -41,11 +46,17 @@ typedef struct s_player {
 	float x;
 	float y;
 
+	uint8_t up;
+	uint8_t down;
+	uint8_t left;
+	uint8_t right;
+
 } t_player;
 
 void draw_player(int x, int y, int size, int color_val, t_game *game);
 void put_pixel(int x, int y, t_rgb color, t_game *game);
 void init_game(t_game *game);
 void render(void *param);
+void init_player(t_player *player);
 
 #endif
