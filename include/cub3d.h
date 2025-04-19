@@ -7,13 +7,6 @@
 #define TRUE 1
 #define FALSE 0
 
-typedef enum e_key {
-	KEY_W = 119,
-	KEY_A = 97,
-	KEY_S = 115,
-	KEY_D = 100
-} t_key;
-
 #define PI 3.1415926 //535
 
 #include "../mlx42/include/MLX42/MLX42.h"
@@ -21,8 +14,6 @@ typedef enum e_key {
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
-
-
 
 typedef union u_rgb {
 	int value;
@@ -47,6 +38,8 @@ typedef struct s_player {
 typedef struct s_game {
 	mlx_t *mlx;
 	mlx_image_t *img;
+
+	char **map;
 
 	int stride;
 	char *pixels;

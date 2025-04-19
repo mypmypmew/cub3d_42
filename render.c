@@ -1,6 +1,25 @@
 
 #include "include/cub3d.h"
 
+char **get_map(void)
+{
+	char **map = malloc(sizeof(char *) * 11);
+
+	map[0] = "111111111111111";
+	map[1] = "100000000000001";
+	map[2] = "100000000000001";
+	map[3] = "100000000000001";
+	map[4] = "100000000000001";
+	map[5] = "100000000000001";
+	map[6] = "100000000000001";
+	map[7] = "100000000000001";
+	map[8] = "100000000000001";
+	map[9] = "111111111111111";
+	map[10] = NULL;
+	return (map);
+
+}
+
 void put_pixel(int x, int y, t_rgb color, t_game *game)
 {
 	int index;
@@ -24,6 +43,8 @@ void init_game(t_game *game) {
 	if(!game->img)
 		exit(EXIT_FAILURE);
 
+	game->map = get_map();
+
 	game->pixels = (char *)game->img->pixels;
 
 	game->bits_per_pixel = 32;
@@ -45,6 +66,20 @@ void clear_screen(t_game *game, uint32_t color)
 	}
 }
 
+void draw_map(t_game *game)
+{
+	char **map = game->map;
+	int color = 0x000FF;
+	for(int y = 0; map[y]; y++)
+	{
+		for(int x = 0; map[y][x]; x++)
+		{
+			if(map[y][x] == '1')
+				draw_player(x*64, y*64, 64, color, game);
+		}
+	}
+}
+
 void render(void *param)
 {
 	t_game *game = (t_game *)param;
@@ -53,4 +88,5 @@ void render(void *param)
 	clear_screen(game, 0x000000);
 	move_player(player);
 	draw_player(player->x, player->y, 10, 0xFFFF00, game);
+	draw_map(game);
 }
