@@ -15,7 +15,7 @@ FRAMEWORKS = -framework Cocoa -framework OpenGL -framework IOKit
 
 LIBS = -lglfw $(FRAMEWORKS)
 
-SRCS = main.c
+SRCS = main.c player.c render.c
 OBJS = $(SRCS:.c=.o)
 
 # **************************************************************************** #
