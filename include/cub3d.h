@@ -20,13 +20,12 @@ typedef union u_rgb {
 } t_rgb;
 
 typedef struct s_game {
-	void *mlx;
-	void *img;
+	mlx_t *mlx;
+	mlx_image_t *img;
 
-	/* for Drawing pixels */
 	int stride;
-	int bits_per_pixel;
 	char *pixels;
+	int bits_per_pixel;
 } t_game;
 
 #endif
