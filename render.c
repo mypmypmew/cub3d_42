@@ -15,6 +15,8 @@ void put_pixel(int x, int y, t_rgb color, t_game *game)
 }
 
 void init_game(t_game *game) {
+
+	init_player(&game->player);
 	game->mlx = mlx_init(WIDTH, HEIGHT, "Cub3D", true);
 	if(!game->mlx)
 		exit(EXIT_FAILURE);

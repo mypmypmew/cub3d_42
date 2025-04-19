@@ -33,15 +33,6 @@ typedef union u_rgb {
 	};
 } t_rgb;
 
-typedef struct s_game {
-	mlx_t *mlx;
-	mlx_image_t *img;
-
-	int stride;
-	char *pixels;
-	int bits_per_pixel;
-} t_game;
-
 typedef struct s_player {
 	float x;
 	float y;
@@ -53,10 +44,22 @@ typedef struct s_player {
 
 } t_player;
 
+typedef struct s_game {
+	mlx_t *mlx;
+	mlx_image_t *img;
+
+	int stride;
+	char *pixels;
+	int bits_per_pixel;
+	t_player player;
+} t_game;
+
 void draw_player(int x, int y, int size, int color_val, t_game *game);
 void put_pixel(int x, int y, t_rgb color, t_game *game);
 void init_game(t_game *game);
 void render(void *param);
 void init_player(t_player *player);
+void unpress_key(mlx_key_data_t keydata, void *param);
+void press_key(mlx_key_data_t keydata, void *param);
 
 #endif
