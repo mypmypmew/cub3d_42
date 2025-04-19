@@ -33,9 +33,24 @@ void init_game(t_game *game) {
 	mlx_image_to_window(game->mlx, game->img, 0, 0);
 }
 
+void clear_screen(t_game *game, uint32_t color)
+{
+	t_rgb rgb;
+	rgb.value = color;
+
+	for (int y = 0; y < HEIGHT; y++) {
+		for (int x = 0; x < WIDTH; x++) {
+			put_pixel(x, y, rgb, game);
+		}
+	}
+}
+
 void render(void *param)
 {
 	t_game *game = (t_game *)param;
+	t_player *player = &game->player;
 
-	draw_player(WIDTH / 2, HEIGHT / 2, 10, 0xFFFF00, game);
+	clear_screen(game, 0x000000);
+	move_player(player);
+	draw_player(player->x, player->y, 10, 0xFFFF00, game);
 }

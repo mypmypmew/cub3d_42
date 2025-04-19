@@ -31,37 +31,35 @@ void init_player(t_player *player)
 	player->left = false;
 }
 
-void press_key(mlx_key_data_t keydata, void *param)
+void handle_key(mlx_key_data_t keydata, void *param)
 {
 	t_game *game = (t_game *)param;
 	t_player *player = &game->player;
+	int is_pressed = (keydata.action == MLX_PRESS);
 
-	if (keydata.action == MLX_PRESS) {
-		if (keydata.key == MLX_KEY_W)
-			player->up = TRUE;
-		if (keydata.key == MLX_KEY_S)
-			player->down = TRUE;
-		if (keydata.key == MLX_KEY_A)
-			player->left = TRUE;
-		if (keydata.key == MLX_KEY_D)
-			player->right = TRUE;
-	}
+	if (keydata.key == MLX_KEY_W)
+		player->up = is_pressed;
+	if (keydata.key == MLX_KEY_S)
+		player->down = is_pressed;
+	if (keydata.key == MLX_KEY_A)
+		player->left = is_pressed;
+	if (keydata.key == MLX_KEY_D)
+		player->right = is_pressed;
 }
 
-void unpress_key(mlx_key_data_t keydata, void *param)
+void move_player(t_player *player)
 {
-	t_game *game = (t_game *)param;
-	t_player *player = &game->player;
+	int speed;
 
-	if (keydata.action == MLX_RELEASE) {
-		if (keydata.key == MLX_KEY_W)
-			player->up = FALSE;
-		if (keydata.key == MLX_KEY_S)
-			player->down = FALSE;
-		if (keydata.key == MLX_KEY_A)
-			player->left = FALSE;
-		if (keydata.key == MLX_KEY_D)
-			player->right = FALSE;
-	}
+	speed = 10;
+
+	if(player->up)
+		player->y -= speed;
+	if(player->down)
+		player->y += speed;
+	if(player->left)
+		player->x -= speed;
+	if(player->right)
+		player->x += speed;
 }
 
