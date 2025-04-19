@@ -4,11 +4,20 @@
 #define WIDTH 800
 #define HEIGHT 600
 
+#define W 119
+#define A 97
+#define S 115
+#define D 100
+
+#define PI 3.1415926 //535
+
 #include "../mlx42/include/MLX42/MLX42.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
+
+
 
 typedef union u_rgb {
 	int value;
@@ -27,5 +36,16 @@ typedef struct s_game {
 	char *pixels;
 	int bits_per_pixel;
 } t_game;
+
+typedef struct s_player {
+	float x;
+	float y;
+
+} t_player;
+
+void draw_player(int x, int y, int size, int color_val, t_game *game);
+void put_pixel(int x, int y, t_rgb color, t_game *game);
+void init_game(t_game *game);
+void render(void *param);
 
 #endif
