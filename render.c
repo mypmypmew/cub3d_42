@@ -53,14 +53,19 @@ void init_game(t_game *game) {
 	mlx_image_to_window(game->mlx, game->img, 0, 0);
 }
 
-void clear_screen(t_game *game, uint32_t color)
+void clear_screen(t_game *game, uint32_t ceiling_color, uint32_t floor_color)
 {
-	t_rgb rgb;
-	rgb.value = color;
+	t_rgb ceil;
+	t_rgb floor;
+	ceil.value = ceiling_color;
+	floor.value = floor_color;
 
 	for (int y = 0; y < HEIGHT; y++) {
 		for (int x = 0; x < WIDTH; x++) {
-			put_pixel(x, y, rgb, game);
+			if (y < HEIGHT / 2)
+				put_pixel(x, y, ceil, game);   // потолок
+			else
+				put_pixel(x, y, floor, game);  // пол
 		}
 	}
 }
@@ -180,7 +185,7 @@ void render(void *param)
 	t_game *game = (t_game *)param;
 	t_player *player = &game->player;
 
-	clear_screen(game, 0x000000);
+	clear_screen(game, 0x333366, 0x444400);
 	move_player(game);
 	if(DEBUG)
 	{
