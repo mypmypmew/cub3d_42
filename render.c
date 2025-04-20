@@ -81,6 +81,14 @@ void draw_map(t_game *game)
 	}
 }
 
+bool touch_edge(float px, float py, t_game *game)
+{
+	int x = px / TILE_SIZE;
+	int y = py / TILE_SIZE;
+	if(game->map[y][x] == '1')
+		return true;
+	return false;
+}
 
 void render(void *param)
 {
@@ -94,4 +102,16 @@ void render(void *param)
 	move_player(player);
 	draw_player(player->x, player->y, 10, 0xFFFF00, game);
 	draw_map(game);
+
+	float ray_x = player->x;
+	float ray_y = player->y;
+	float cos_angle = cos(player->angle);
+	float sin_angle = sin(player->angle);
+
+	while(!touch_edge(ray_x, ray_y, game))
+	{
+		put_pixel(ray_x, ray_y, rgb, game);
+		ray_x += cos_angle;
+		ray_y += sin_angle;
+	}
 }
