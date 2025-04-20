@@ -19,6 +19,9 @@
 #define DEBUG 0
 
 #define PROJ_PLANE_DIST ((WIDTH / 2) / tan(FOV / 2))
+#define MAP_WIDTH 15
+#define MAP_HEIGHT 10
+#define COLLISION_PADDING 4
 
 
 #include "../mlx42/include/MLX42/MLX42.h"

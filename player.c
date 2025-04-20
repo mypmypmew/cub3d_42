@@ -1,6 +1,17 @@
 
 #include "include/cub3d.h"
 
+bool is_wall(float x, float y, t_game *game)
+{
+	int grid_x = x / TILE_SIZE;
+	int grid_y = y / TILE_SIZE;
+
+	if (grid_x < 0 || grid_y < 0 || grid_y >= MAP_HEIGHT || grid_x >= MAP_WIDTH)
+		return true;
+
+	return (game->map[grid_y][grid_x] == '1');
+}
+
 void draw_player(int x, int y, int size, int color_val, t_game *game)
 {
 	t_rgb color;
@@ -66,14 +77,12 @@ float normalize_angle(float angle)
 void move_player(t_game *game)
 {
 	t_player *player = &game->player;
-	mlx_t *mlx = game->mlx;
+	float speed = 5.0f;
+	float rotate_speed = 0.05f;
 
-	float speed = 3.0f;
-	float rotate_speed = 0.03f;
-
-	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
+	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
 		player->angle -= rotate_speed;
-	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
+	if (mlx_is_key_down(game->mlx, MLX_KEY_RIGHT))
 		player->angle += rotate_speed;
 
 	player->angle = normalize_angle(player->angle);
@@ -81,24 +90,45 @@ void move_player(t_game *game)
 	float cos_a = cos(player->angle);
 	float sin_a = sin(player->angle);
 
-	if (mlx_is_key_down(mlx, MLX_KEY_W))
+	float new_x, new_y;
+
+	if (mlx_is_key_down(game->mlx, MLX_KEY_W))
 	{
-		player->x += cos_a * speed;
-		player->y += sin_a * speed;
+		new_x = player->x + cos_a * speed;
+		new_y = player->y + sin_a * speed;
+		if (!is_wall(new_x, player->y, game))
+			player->x = new_x;
+		if (!is_wall(player->x, new_y, game))
+			player->y = new_y;
 	}
-	if (mlx_is_key_down(mlx, MLX_KEY_S))
+
+	if (mlx_is_key_down(game->mlx, MLX_KEY_S))
 	{
-		player->x -= cos_a * speed;
-		player->y -= sin_a * speed;
+		new_x = player->x - cos_a * speed;
+		new_y = player->y - sin_a * speed;
+		if (!is_wall(new_x, player->y, game))
+			player->x = new_x;
+		if (!is_wall(player->x, new_y, game))
+			player->y = new_y;
 	}
-	if (mlx_is_key_down(mlx, MLX_KEY_A))
+
+	if (mlx_is_key_down(game->mlx, MLX_KEY_A))
 	{
-		player->x -= sin_a * speed;
-		player->y += cos_a * speed;
+		new_x = player->x - sin_a * speed;
+		new_y = player->y + cos_a * speed;
+		if (!is_wall(new_x, player->y, game))
+			player->x = new_x;
+		if (!is_wall(player->x, new_y, game))
+			player->y = new_y;
 	}
-	if (mlx_is_key_down(mlx, MLX_KEY_D))
+
+	if (mlx_is_key_down(game->mlx, MLX_KEY_D))
 	{
-		player->x += sin_a * speed;
-		player->y -= cos_a * speed;
+		new_x = player->x + sin_a * speed;
+		new_y = player->y - cos_a * speed;
+		if (!is_wall(new_x, player->y, game))
+			player->x = new_x;
+		if (!is_wall(player->x, new_y, game))
+			player->y = new_y;
 	}
 }

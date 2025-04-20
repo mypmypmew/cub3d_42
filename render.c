@@ -17,7 +17,6 @@ char **get_map(void)
 	map[9] = "111111111111111";
 	map[10] = NULL;
 	return (map);
-
 }
 
 void put_pixel(int x, int y, t_rgb color, t_game *game)
