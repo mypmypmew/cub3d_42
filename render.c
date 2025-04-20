@@ -75,15 +75,20 @@ void draw_map(t_game *game)
 		for(int x = 0; map[y][x]; x++)
 		{
 			if(map[y][x] == '1')
-				draw_player(x*64, y*64, 64, color, game);
+				draw_player(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, color, game);
+
 		}
 	}
 }
+
 
 void render(void *param)
 {
 	t_game *game = (t_game *)param;
 	t_player *player = &game->player;
+
+	t_rgb rgb;
+	rgb.value = 0xFF0000;
 
 	clear_screen(game, 0x000000);
 	move_player(player);

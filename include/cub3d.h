@@ -1,11 +1,16 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 1280
+#define HEIGHT 720
+
+#define TILE_SIZE 64
 
 #define TRUE 1
 #define FALSE 0
+
+#define LEFT 65361
+#define RIGHT 65363
 
 #define PI 3.1415926 //535
 
@@ -27,11 +32,15 @@ typedef union u_rgb {
 typedef struct s_player {
 	float x;
 	float y;
+	float angle;
 
 	uint8_t up;
 	uint8_t down;
 	uint8_t left;
 	uint8_t right;
+
+	bool left_rotate;
+	bool right_rotate;
 
 } t_player;
 
