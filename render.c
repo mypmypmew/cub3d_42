@@ -7,9 +7,9 @@ char **get_map(void)
 
 	map[0] = "111111111111111";
 	map[1] = "100000000000001";
-	map[2] = "100000000000001";
+	map[2] = "100001000000001";
 	map[3] = "100000000000001";
-	map[4] = "100000000000001";
+	map[4] = "100000000001001";
 	map[5] = "100000000000001";
 	map[6] = "100000000000001";
 	map[7] = "100000000000001";
@@ -95,12 +95,12 @@ bool touch_edge(float px, float py, t_game *game)
 	return false;
 }
 
-void draw_ray(t_game *game, t_player *player)
+void cast_single_ray(t_player *player, t_game *game, float ray_angle)
 {
+	float cos_angle = cos(ray_angle);
+	float sin_angle = sin(ray_angle);
 	float ray_x = player->x;
 	float ray_y = player->y;
-	float cos_angle = cos(player->angle);
-	float sin_angle = sin(player->angle);
 
 	t_rgb rgb;
 	rgb.value = 0xFF0000;
@@ -113,6 +113,28 @@ void draw_ray(t_game *game, t_player *player)
 	}
 }
 
+void draw_ray(t_game *game, t_player *player)
+{
+	// float fraction = FOV / WIDTH;
+	// float ray_angle = player->angle - PI / 6;
+	// int i = 0;
+	// while(i < WIDTH)
+	// {
+	// 	cast_single_ray(player, game, ray_angle);
+	// 	ray_angle += fraction;
+	// 	ray_angle = normalize_angle(ray_angle);
+	// 	i++;
+	// }
+
+	float ray_angle = player->angle - (FOV / 2);
+	float angle_step = FOV / NUM_RAYS;
+
+	for(int i = 0; i < NUM_RAYS; i++)
+	{
+		cast_single_ray(player, game, ray_angle);
+		ray_angle += angle_step;
+	}
+}
 
 void render(void *param)
 {

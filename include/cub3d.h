@@ -13,6 +13,8 @@
 #define RIGHT 65363
 
 #define PI 3.1415926 //535
+#define FOV (PI / 3)
+#define NUM_RAYS WIDTH
 
 #include "../mlx42/include/MLX42/MLX42.h"
 #include <stdlib.h>
@@ -74,5 +76,6 @@ void render(void *param);
 void init_player(t_player *player);
 void handle_key(mlx_key_data_t keydata, void *param);
 void move_player(t_game *game);
+float normalize_angle(float angle);
 
 #endif
