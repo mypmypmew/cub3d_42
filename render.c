@@ -95,7 +95,12 @@ bool touch_edge(float px, float py, t_game *game)
 	return false;
 }
 
-void cast_single_ray(t_player *player, t_game *game, float ray_angle)
+float distance(float x, float y)
+{
+	return sqrt(x*x + y*y);
+}
+
+void cast_single_ray(t_player *player, t_game *game, float ray_angle, int i)
 {
 	float cos_angle = cos(ray_angle);
 	float sin_angle = sin(ray_angle);
@@ -107,9 +112,20 @@ void cast_single_ray(t_player *player, t_game *game, float ray_angle)
 
 	while(!touch_edge(ray_x, ray_y, game))
 	{
-		put_pixel(ray_x, ray_y, rgb, game);
+		// put_pixel(ray_x, ray_y, rgb, game);
 		ray_x += cos_angle;
 		ray_y += sin_angle;
+	}
+
+	float dist = distance(ray_x - player->x, ray_y - player->y);
+	float height= (TILE_SIZE / dist) * (WIDTH / 2);
+	int start_y = (HEIGHT - height) / 2;
+	int end = start_y + height;
+
+	while(start_y < end)
+	{
+		put_pixel(i, start_y, rgb, game);
+		start_y++;
 	}
 }
 
@@ -131,7 +147,7 @@ void draw_ray(t_game *game, t_player *player)
 
 	for(int i = 0; i < NUM_RAYS; i++)
 	{
-		cast_single_ray(player, game, ray_angle);
+		cast_single_ray(player, game, ray_angle, i);
 		ray_angle += angle_step;
 	}
 }
@@ -143,7 +159,7 @@ void render(void *param)
 
 	clear_screen(game, 0x000000);
 	move_player(game);
-	draw_player(player->x, player->y, 10, 0xFFFF00, game);
-	draw_map(game);
+	// draw_player(player->x, player->y, 10, 0xFFFF00, game);
+	// draw_map(game);
 	draw_ray(game, player);
 }
