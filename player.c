@@ -114,8 +114,8 @@ void move_player(t_game *game)
 
 	if (mlx_is_key_down(game->mlx, MLX_KEY_A))
 	{
-		new_x = player->x - sin_a * speed;
-		new_y = player->y + cos_a * speed;
+		new_x = player->x + sin_a * speed;
+		new_y = player->y - cos_a * speed;
 		if (!is_wall(new_x, player->y, game))
 			player->x = new_x;
 		if (!is_wall(player->x, new_y, game))
@@ -124,8 +124,8 @@ void move_player(t_game *game)
 
 	if (mlx_is_key_down(game->mlx, MLX_KEY_D))
 	{
-		new_x = player->x + sin_a * speed;
-		new_y = player->y - cos_a * speed;
+		new_x = player->x - sin_a * speed;
+		new_y = player->y + cos_a * speed;
 		if (!is_wall(new_x, player->y, game))
 			player->x = new_x;
 		if (!is_wall(player->x, new_y, game))
