@@ -81,6 +81,7 @@ void draw_map(t_game *game)
 	}
 }
 
+
 bool touch_edge(float px, float py, t_game *game)
 {
 	int map_heigt = 10;
@@ -94,23 +95,15 @@ bool touch_edge(float px, float py, t_game *game)
 	return false;
 }
 
-void render(void *param)
+void draw_ray(t_game *game, t_player *player)
 {
-	t_game *game = (t_game *)param;
-	t_player *player = &game->player;
-
-	t_rgb rgb;
-	rgb.value = 0xFF0000;
-
-	clear_screen(game, 0x000000);
-	move_player(game);
-	draw_player(player->x, player->y, 10, 0xFFFF00, game);
-	draw_map(game);
-
 	float ray_x = player->x;
 	float ray_y = player->y;
 	float cos_angle = cos(player->angle);
 	float sin_angle = sin(player->angle);
+
+	t_rgb rgb;
+	rgb.value = 0xFF0000;
 
 	while(!touch_edge(ray_x, ray_y, game))
 	{
@@ -118,4 +111,17 @@ void render(void *param)
 		ray_x += cos_angle;
 		ray_y += sin_angle;
 	}
+}
+
+
+void render(void *param)
+{
+	t_game *game = (t_game *)param;
+	t_player *player = &game->player;
+
+	clear_screen(game, 0x000000);
+	move_player(game);
+	draw_player(player->x, player->y, 10, 0xFFFF00, game);
+	draw_map(game);
+	draw_ray(game, player);
 }

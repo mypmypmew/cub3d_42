@@ -54,6 +54,15 @@ void handle_key(mlx_key_data_t keydata, void *param)
 		player->input.rotate_right = is_pressed;
 }
 
+float normalize_angle(float angle)
+{
+	if(angle < 0)
+		return (angle + 2 * PI);
+	if(angle >= 2 * PI)
+		return angle - 2 * PI;
+	return angle;
+}
+
 void move_player(t_game *game)
 {
 	t_player *player = &game->player;
@@ -62,19 +71,13 @@ void move_player(t_game *game)
 	float speed = 5.0f;
 	float rotate_speed = 0.05f;
 
-	// Поворот
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
 		player->angle -= rotate_speed;
 	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
 		player->angle += rotate_speed;
 
-	// Нормализовать угол
-	if (player->angle > 2 * PI)
-		player->angle -= 2 * PI;
-	if (player->angle < 0)
-		player->angle += 2 * PI;
+	player->angle = normalize_angle(player->angle);
 
-	// Движение
 	float cos_a = cos(player->angle);
 	float sin_a = sin(player->angle);
 
