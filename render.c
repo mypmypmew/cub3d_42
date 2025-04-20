@@ -81,7 +81,6 @@ void draw_map(t_game *game)
 	}
 }
 
-
 bool touch_edge(float px, float py, t_game *game)
 {
 	int map_heigt = 10;
@@ -109,6 +108,40 @@ float fixed_dist(float x1, float y1, float x2, float y2, t_game *game)
 	return fix_dist;
 }
 
+void render_debug_ray(float ray_x, float ray_y, float cos_a, float sin_a, t_game *game)
+{
+	t_rgb rgb;
+	rgb.value = 0xFF0000;
+
+	while (!touch_edge(ray_x, ray_y, game))
+	{
+		put_pixel(ray_x, ray_y, rgb, game);
+		ray_x += cos_a;
+		ray_y += sin_a;
+	}
+}
+
+
+void render_3d_wall(t_player *player, float ray_x, float ray_y, int col, t_game *game)
+{
+	t_rgb rgb;
+	rgb.value = 0xFF0000;
+
+	float dist = fixed_dist(player->x, player->y, ray_x, ray_y, game);
+	float height = (TILE_SIZE / dist) * PROJ_PLANE_DIST;
+	int start_y = (HEIGHT - height) / 2;
+	int end = start_y + height;
+
+	if (start_y < 0) start_y = 0;
+	if (end > HEIGHT) end = HEIGHT;
+
+	while (start_y < end)
+	{
+		put_pixel(col, start_y, rgb, game);
+		start_y++;
+	}
+}
+
 void cast_single_ray(t_player *player, t_game *game, float ray_angle, int i)
 {
 	float cos_angle = cos(ray_angle);
@@ -116,46 +149,23 @@ void cast_single_ray(t_player *player, t_game *game, float ray_angle, int i)
 	float ray_x = player->x;
 	float ray_y = player->y;
 
-	t_rgb rgb;
-	rgb.value = 0xFF0000;
-
-	while(!touch_edge(ray_x, ray_y, game))
+	if (DEBUG)
 	{
-		if(DEBUG)
+		render_debug_ray(ray_x, ray_y, cos_angle, sin_angle, game);
+	}
+	else
+	{
+		while (!touch_edge(ray_x, ray_y, game))
 		{
-		put_pixel(ray_x, ray_y, rgb, game);
+			ray_x += cos_angle;
+			ray_y += sin_angle;
 		}
-		ray_x += cos_angle;
-		ray_y += sin_angle;
-	}
-	if(!DEBUG)
-	{
-	float dist = fixed_dist(player->x, player->y, ray_x, ray_y, game);
-	float height= (TILE_SIZE / dist) * (WIDTH / 2);
-	int start_y = (HEIGHT - height) / 2;
-	int end = start_y + height;
-
-	while(start_y < end)
-	{
-		put_pixel(i, start_y, rgb, game);
-		start_y++;
-	}
+		render_3d_wall(player, ray_x, ray_y, i, game);
 	}
 }
 
 void draw_ray(t_game *game, t_player *player)
 {
-	// float fraction = FOV / WIDTH;
-	// float ray_angle = player->angle - PI / 6;
-	// int i = 0;
-	// while(i < WIDTH)
-	// {
-	// 	cast_single_ray(player, game, ray_angle);
-	// 	ray_angle += fraction;
-	// 	ray_angle = normalize_angle(ray_angle);
-	// 	i++;
-	// }
-
 	float ray_angle = player->angle - (FOV / 2);
 	float angle_step = FOV / NUM_RAYS;
 
