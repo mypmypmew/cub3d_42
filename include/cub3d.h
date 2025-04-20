@@ -16,6 +16,9 @@
 #define FOV (PI / 3)
 #define NUM_RAYS WIDTH
 
+#define DEBUG 0
+
+
 #include "../mlx42/include/MLX42/MLX42.h"
 #include <stdlib.h>
 #include <stdio.h>

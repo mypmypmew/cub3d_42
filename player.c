@@ -68,8 +68,8 @@ void move_player(t_game *game)
 	t_player *player = &game->player;
 	mlx_t *mlx = game->mlx;
 
-	float speed = 5.0f;
-	float rotate_speed = 0.05f;
+	float speed = 3.0f;
+	float rotate_speed = 0.03f;
 
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
 		player->angle -= rotate_speed;
