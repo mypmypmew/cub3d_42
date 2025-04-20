@@ -1,6 +1,11 @@
 
 #include "include/cub3d.h"
 
+
+// хардкод карта для теста
+// тебе нужно сделать так, чтобы если карта не прямяугльная/квадратная, а другой формы (но замкнутая)
+// subject page 9 (пример)
+// чтобы заполнялись "значения" до прямоугольной карты
 char **get_map(void)
 {
 	char **map = malloc(sizeof(char *) * 11);
@@ -42,6 +47,8 @@ void init_game(t_game *game) {
 	if(!game->img)
 		exit(EXIT_FAILURE);
 
+	// Тут мы засовываем карту в главную структуру
+
 	game->map = get_map();
 
 	game->pixels = (char *)game->img->pixels;
@@ -69,6 +76,7 @@ void clear_screen(t_game *game, uint32_t ceiling_color, uint32_t floor_color)
 		}
 	}
 }
+
 
 void draw_map(t_game *game)
 {
