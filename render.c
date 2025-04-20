@@ -83,8 +83,12 @@ void draw_map(t_game *game)
 
 bool touch_edge(float px, float py, t_game *game)
 {
+	int map_heigt = 10;
+	int map_width = 15;
 	int x = px / TILE_SIZE;
 	int y = py / TILE_SIZE;
+	if (x < 0 || y < 0 || y >= map_heigt || x >= map_width)
+		return true;
 	if(game->map[y][x] == '1')
 		return true;
 	return false;
@@ -99,7 +103,7 @@ void render(void *param)
 	rgb.value = 0xFF0000;
 
 	clear_screen(game, 0x000000);
-	move_player(player);
+	move_player(game);
 	draw_player(player->x, player->y, 10, 0xFFFF00, game);
 	draw_map(game);
 

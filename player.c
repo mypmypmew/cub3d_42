@@ -6,7 +6,6 @@ void draw_player(int x, int y, int size, int color_val, t_game *game)
 	t_rgb color;
 	color.value = color_val;
 
-
 	for (int i = 0; i < size; i++)
 		put_pixel(x + i, y, color, game);
 
@@ -26,13 +25,13 @@ void init_player(t_player *player)
 	player->y = HEIGHT / 2;
 	player->angle = PI / 2;
 
-	player->up = false;
-	player->down = false;
-	player->right = false;
-	player->left = false;
+	player->input.up = false;
+	player->input.down = false;
+	player->input.right = false;
+	player->input.left = false;
 
-	player->left_rotate = false;
-	player->right_rotate = false;
+	player->input.rotate_left = false;
+	player->input.rotate_right = false;
 }
 
 void handle_key(mlx_key_data_t keydata, void *param)
@@ -42,59 +41,61 @@ void handle_key(mlx_key_data_t keydata, void *param)
 	int is_pressed = (keydata.action == MLX_PRESS);
 
 	if (keydata.key == MLX_KEY_W)
-		player->up = is_pressed;
+		player->input.up = is_pressed;
 	if (keydata.key == MLX_KEY_S)
-		player->down = is_pressed;
+		player->input.down = is_pressed;
 	if (keydata.key == MLX_KEY_A)
-		player->left = is_pressed;
+		player->input.left = is_pressed;
 	if (keydata.key == MLX_KEY_D)
-		player->right = is_pressed;
+		player->input.right = is_pressed;
 	if (keydata.key == MLX_KEY_LEFT)
-		player->left_rotate = is_pressed;
+		player->input.rotate_left = is_pressed;
 	if (keydata.key == MLX_KEY_RIGHT)
-		player->right_rotate = is_pressed;
+		player->input.rotate_right = is_pressed;
 }
 
-void move_player(t_player *player)
+void move_player(t_game *game)
 {
-	int speed = 5;
-	float rotate_speed;
+	t_player *player = &game->player;
+	mlx_t *mlx = game->mlx;
 
-	rotate_speed = 0.05;
+	float speed = 5.0f;
+	float rotate_speed = 0.05f;
 
-float cos_angle = cos(player->angle);
-float sin_angle = sin(player->angle);
+	// Поворот
+	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
+		player->angle -= rotate_speed;
+	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
+		player->angle += rotate_speed;
 
-if (player->left_rotate)
-	player->angle -= rotate_speed;
-if (player->right_rotate)
-	player->angle += rotate_speed;
+	// Нормализовать угол
+	if (player->angle > 2 * PI)
+		player->angle -= 2 * PI;
+	if (player->angle < 0)
+		player->angle += 2 * PI;
 
-if (player->angle > 2 * PI)
-	player->angle -= 2 * PI;
-if (player->angle < 0)
-	player->angle += 2 * PI;
+	// Движение
+	float cos_a = cos(player->angle);
+	float sin_a = sin(player->angle);
 
-
-if (player->up)
-{
-	player->x += cos_angle * speed;
-	player->y += sin_angle * speed;
+	if (mlx_is_key_down(mlx, MLX_KEY_W))
+	{
+		player->x += cos_a * speed;
+		player->y += sin_a * speed;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_S))
+	{
+		player->x -= cos_a * speed;
+		player->y -= sin_a * speed;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_A))
+	{
+		player->x -= sin_a * speed;
+		player->y += cos_a * speed;
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_D))
+	{
+		player->x += sin_a * speed;
+		player->y -= cos_a * speed;
+	}
 }
-if (player->down)
-{
-	player->x -= cos_angle * speed;
-	player->y -= sin_angle * speed;
-}
-if (player->left)
-{
-	player->x -= sin_angle * speed;
-	player->y += cos_angle * speed;
-}
-if (player->right)
-{
-	player->x += sin_angle * speed;
-	player->y -= cos_angle * speed;
-}
-}
-

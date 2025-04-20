@@ -20,6 +20,15 @@
 #include <stdbool.h>
 #include <math.h>
 
+typedef struct s_input {
+	bool up;
+	bool down;
+	bool left;
+	bool right;
+	bool rotate_left;
+	bool rotate_right;
+} t_input;
+
 typedef union u_rgb {
 	int value;
 	struct {
@@ -42,6 +51,8 @@ typedef struct s_player {
 	bool left_rotate;
 	bool right_rotate;
 
+	t_input input;
+
 } t_player;
 
 typedef struct s_game {
@@ -62,6 +73,6 @@ void init_game(t_game *game);
 void render(void *param);
 void init_player(t_player *player);
 void handle_key(mlx_key_data_t keydata, void *param);
-void move_player(t_player *player);
+void move_player(t_game *game);
 
 #endif
